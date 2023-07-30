@@ -34,7 +34,7 @@ class AuthApi extends ChangeNotifier {
         .setEndpoint(APPWRITE_URL)
         .setProject(APPWRITE_PROJECT_ID)
         .setSelfSigned();
-    Account(client);
+    account = Account(client);
   }
 
   loadUser() async {
@@ -44,6 +44,41 @@ class AuthApi extends ChangeNotifier {
       _currentUser = user;
     } catch (e) {
       _status = AuthStatus.unauthenticated;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<User> createUser({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final user = await account.create(
+        userId: ID.unique(),
+        name: name,
+        email: email,
+        password: password,
+      );
+      return user;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<Session> createEmailSession({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final session = await account.createEmailSession(
+        email: email,
+        password: password,
+      );
+      _currentUser = await account.get();
+      _status = AuthStatus.authenticated;
+      return session;
     } finally {
       notifyListeners();
     }
