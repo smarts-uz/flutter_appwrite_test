@@ -1,5 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite_test/appwrite/auth_api.dart';
 import 'package:appwrite_test/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,6 +16,54 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  signin() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [CircularProgressIndicator()],
+          ),
+        );
+      },
+    );
+    try {
+      final AuthApi appwrite = context.read<AuthApi>();
+      await appwrite.createEmailSession(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      Navigator.pop(context);
+    } on AppwriteException catch (e) {
+      Navigator.of(context);
+      showAlert(title: 'Login Failed!', text: e.message.toString());
+    }
+  }
+
+  showAlert({required String title, required String text}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(text),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  signin();
+                },
                 icon: const Icon(Icons.login_rounded),
                 label: const Text('Login'),
               ),
