@@ -83,4 +83,13 @@ class AuthApi extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  signOut() async {
+    try {
+      await account.deleteSession(sessionId: 'current');
+      _status = AuthStatus.unauthenticated;
+    } finally {
+      notifyListeners();
+    }
+  }
 }
