@@ -92,4 +92,12 @@ class AuthApi extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<Preferences> getUserPreferences() async {
+    return await account.getPrefs();
+  }
+
+  updatePrefs({required String bio}) async {
+    await account.updatePrefs(prefs: {'bio': bio});
+  }
 }
