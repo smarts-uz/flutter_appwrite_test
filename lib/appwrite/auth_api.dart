@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
+import 'package:flutter/material.dart';
 
 class AppwriteClient {
   static Client client = Client();
@@ -21,7 +22,7 @@ class AppwriteClient {
       );
       return user;
     } on AppwriteException catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     return null;
   }
