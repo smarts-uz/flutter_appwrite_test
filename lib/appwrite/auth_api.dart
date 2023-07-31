@@ -84,6 +84,17 @@ class AuthApi extends ChangeNotifier {
     }
   }
 
+  signinWithProvider({required String provider}) async {
+    try {
+      final session = await account.createOAuth2Session(provider: provider);
+      _currentUser = await account.get();
+      _status = AuthStatus.authenticated;
+      return session;
+    } finally {
+      notifyListeners();
+    }
+  }
+
   signOut() async {
     try {
       await account.deleteSession(sessionId: 'current');

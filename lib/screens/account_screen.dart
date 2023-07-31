@@ -32,7 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
   updatePrefs() async {
     final AuthApi appwrite = context.read<AuthApi>();
     appwrite.updatePrefs(bio: bioController.text);
-    const snackbar = SnackBar(content: Text('Snackbar updated!'));
+    const snackbar = SnackBar(content: Text('Bio updated!'));
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 

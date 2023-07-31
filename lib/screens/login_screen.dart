@@ -44,6 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  signinWithProvider(String provider) {
+    try {
+      context.read<AuthApi>().signinWithProvider(provider: provider);
+    } on AppwriteException catch (e) {
+      showAlert(title: 'Failed', text: e.message.toString());
+    }
+  }
+
   showAlert({required String title, required String text}) {
     showDialog(
       context: context,
@@ -109,6 +117,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 },
                 child: const Text('Create an account'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  signinWithProvider('google');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Sign in with Google'),
               ),
             ],
           ),
