@@ -1,4 +1,5 @@
 import 'package:appwrite_test/screens/account_screen.dart';
+import 'package:appwrite_test/screens/images_screen.dart';
 import 'package:appwrite_test/screens/messages_screen.dart';
 import 'package:appwrite_test/screens/numbers_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _TabsScreenState extends State<TabsScreen> {
   final List<Widget> screens = const [
     MessagesScreen(),
     NumbersScreen(),
+    ImagesScreen(),
     AccountScreen(),
   ];
 
@@ -30,6 +32,8 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       body: screens.elementAt(selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black,
         currentIndex: selectedIndex,
         onTap: onTap,
         items: const [
@@ -40,6 +44,10 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.numbers_rounded),
             label: 'Numbers',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.storage_rounded),
+            label: 'Images',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
