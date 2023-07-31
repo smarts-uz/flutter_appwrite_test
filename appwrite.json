@@ -1,0 +1,21 @@
+{
+    "projectId": "64c6053c79eda5fc59b6",
+    "projectName": "TestApp",
+    "functions": [
+        {
+            "$id": "64c78c07b9131959277f",
+            "name": "MyFirstTestFunction",
+            "runtime": "dart-2.17",
+            "path": "functions/MyFirstTestFunction",
+            "entrypoint": "lib/main.dart",
+            "ignore": [
+                ".packages",
+                ".dart_tool"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
