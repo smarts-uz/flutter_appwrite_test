@@ -3,6 +3,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite_test/appwrite/auth_api.dart';
 import 'package:appwrite_test/screens/signup_screen.dart';
+import 'package:appwrite_test/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -117,6 +118,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 },
                 child: const Text('Create an account'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TabsScreen(),
+                    ),
+                  );
+                },
+                child: const Text('Read messages as a guest'),
               ),
               ElevatedButton(
                 onPressed: () {
