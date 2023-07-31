@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:appwrite_test/appwrite/auth_api.dart';
 import 'package:appwrite_test/appwrite/database_api.dart';
@@ -33,6 +36,18 @@ class _MessagesScreenState extends State<MessagesScreen> {
       });
     } catch (e) {
       showAlert(title: 'Loading Failed!', text: e.toString());
+    }
+  }
+
+  addMessage() async {
+    try {
+      await database.addMessage(messageController.text);
+      const snackbar = SnackBar(content: Text('Message added!'));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      messageController.clear();
+      loadMessages();
+    } on AppwriteException catch (e) {
+      showAlert(title: 'Failed!', text: e.message.toString());
     }
   }
 
@@ -78,7 +93,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          addMessage();
+                        },
                         icon: const Icon(Icons.send_rounded),
                       ),
                     ],

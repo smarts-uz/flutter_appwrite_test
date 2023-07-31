@@ -31,4 +31,17 @@ class DatatbaseApi extends ChangeNotifier {
       collectionId: COLLECTION_MESSAGES_ID,
     );
   }
+
+  Future<Document> addMessage(String message) {
+    return databases.createDocument(
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId: COLLECTION_MESSAGES_ID,
+      documentId: ID.unique(),
+      data: {
+        'text': message,
+        'date': DateTime.now().toString(),
+        'user_id': authApi.userId,
+      },
+    );
+  }
 }
