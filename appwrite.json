@@ -3,10 +3,10 @@
     "projectName": "TestApp",
     "functions": [
         {
-            "$id": "64c78c07b9131959277f",
-            "name": "MyFirstTestFunction",
+            "$id": "64c7f29fc5ff596972d3",
+            "name": "test_function",
             "runtime": "dart-2.17",
-            "path": "functions/MyFirstTestFunction",
+            "path": "functions/test_function",
             "entrypoint": "lib/main.dart",
             "ignore": [
                 ".packages",
