@@ -128,6 +128,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: const Text('Sign in with Google'),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  signinWithProvider('apple');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Sign in with Apple'),
+              ),
             ],
           ),
         ),
