@@ -32,13 +32,13 @@ class DatatbaseApi extends ChangeNotifier {
     );
   }
 
-  Future<DocumentList> getNumbers() {
+  Future<DocumentList> getNumbers(int pageKey, int pageSize) {
     return databases.listDocuments(
       databaseId: APPWRITE_DATABASE_ID,
       collectionId: COLLECTION_NUMBERS_ID,
       queries: [
-        Query.orderDesc('number'),
-        Query.lessThanEqual("number", 698),
+        Query.limit(pageSize),
+        Query.offset(pageKey),
       ],
     );
   }

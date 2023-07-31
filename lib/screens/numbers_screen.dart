@@ -1,6 +1,7 @@
 import 'package:appwrite/models.dart';
 import 'package:appwrite_test/appwrite/database_api.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class NumbersScreen extends StatefulWidget {
   const NumbersScreen({super.key});
@@ -11,43 +12,38 @@ class NumbersScreen extends StatefulWidget {
 
 class _NumbersScreenState extends State<NumbersScreen> {
   final database = DatatbaseApi();
-  List<Document>? numbers = [];
+  static const _pageSize = 20;
+
+  final PagingController<int, Document> _pagingController =
+      PagingController(firstPageKey: 0);
 
   @override
   void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
     super.initState();
-    loadNumbers();
   }
 
-  loadNumbers() async {
+  Future<void> _fetchPage(int pageKey) async {
     try {
-      final value = await database.getNumbers();
-      setState(() {
-        numbers = value.documents;
-      });
-    } catch (e) {
-      showAlert(title: 'Loading Failed!', text: e.toString());
+      final newItems = await database.getNumbers(pageKey, _pageSize);
+      final isLastPage = newItems.documents.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems.documents);
+      } else {
+        final nextPageKey = pageKey + newItems.documents.length;
+        _pagingController.appendPage(newItems.documents, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
     }
   }
 
-  showAlert({required String title, required String text}) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(text),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Ok'),
-            )
-          ],
-        );
-      },
-    );
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,23 +54,23 @@ class _NumbersScreenState extends State<NumbersScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: numbers?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final message = numbers![index];
-                  return Card(
-                    child: ListTile(
-                      leading: Text(message.data['number'].toString()),
-                      title: Text(message.data['text']),
-                    ),
-                  );
-                },
-              ),
+        child: RefreshIndicator(
+          onRefresh: () => Future.sync(
+            () => _pagingController.refresh(),
+          ),
+          child: PagedListView<int, Document>.separated(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<Document>(
+              itemBuilder: (context, item, index) {
+                return ListTile(
+                  leading: Text(item.data['number'].toString()),
+                  title: Text(item.data['text']),
+                  tileColor: Colors.grey.shade100,
+                );
+              },
             ),
-          ],
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+          ),
         ),
       ),
     );
