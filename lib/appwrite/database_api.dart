@@ -44,4 +44,12 @@ class DatatbaseApi extends ChangeNotifier {
       },
     );
   }
+
+  Future<dynamic> deleteMessage(String id) {
+    return databases.deleteDocument(
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId: COLLECTION_MESSAGES_ID,
+      documentId: id,
+    );
+  }
 }

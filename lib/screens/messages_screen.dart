@@ -51,6 +51,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
     }
   }
 
+  deleteMessage(String id) async {
+    try {
+      await database.deleteMessage(id);
+      const snackbar = SnackBar(content: Text('Message deleted!'));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      loadMessages();
+    } on AppwriteException catch (e) {
+      showAlert(title: 'Failed!', text: e.message.toString());
+    }
+  }
+
   showAlert({required String title, required String text}) {
     showDialog(
       context: context,
@@ -111,7 +122,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     child: ListTile(
                       title: Text(message.data['text']),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          deleteMessage(message.$id);
+                        },
                         icon: const Icon(Icons.delete_rounded),
                       ),
                     ),
