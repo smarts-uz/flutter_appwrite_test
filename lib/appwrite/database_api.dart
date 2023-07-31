@@ -32,6 +32,17 @@ class DatatbaseApi extends ChangeNotifier {
     );
   }
 
+  Future<DocumentList> getNumbers() {
+    return databases.listDocuments(
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId: COLLECTION_NUMBERS_ID,
+      queries: [
+        Query.orderDesc('number'),
+        Query.lessThanEqual("number", 698),
+      ],
+    );
+  }
+
   Future<Document> addMessage(String message) {
     return databases.createDocument(
       databaseId: APPWRITE_DATABASE_ID,

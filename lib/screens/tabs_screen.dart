@@ -1,5 +1,6 @@
 import 'package:appwrite_test/screens/account_screen.dart';
 import 'package:appwrite_test/screens/messages_screen.dart';
+import 'package:appwrite_test/screens/numbers_screen.dart';
 import 'package:flutter/material.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -18,7 +19,11 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
-  final List<Widget> screens = const [MessagesScreen(), AccountScreen()];
+  final List<Widget> screens = const [
+    MessagesScreen(),
+    NumbersScreen(),
+    AccountScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,10 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.message_rounded),
             label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.numbers_rounded),
+            label: 'Numbers',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
